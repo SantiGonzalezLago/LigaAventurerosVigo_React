@@ -237,7 +237,7 @@ export function LoginModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =
               Reintentar Google
             </button>
           )}
-          {googleButtonReady && <div ref={googleButtonContainerRef} className="google-button-container" />}
+          {googleButtonReady && <div ref={googleButtonContainerRef} className="google-button-container" style={{ colorScheme: 'light' }} />}
         </div>
       </div>
     </Modal>
