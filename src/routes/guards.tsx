@@ -6,7 +6,7 @@ export function RequireAdmin() {
   const location = useLocation();
 
   if (!hasAdminAccess) {
-    return <Navigate to="/home" replace state={{ from: location }} />;
+    return <Navigate to="/" replace state={{ from: location }} />;
   }
 
   return <Outlet />;
@@ -17,7 +17,7 @@ export function RequireMaster() {
   const location = useLocation();
 
   if (!hasMasterAccess) {
-    return <Navigate to="/home" replace state={{ from: location }} />;
+    return <Navigate to="/" replace state={{ from: location }} />;
   }
 
   return <Outlet />;

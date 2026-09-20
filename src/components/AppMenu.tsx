@@ -94,7 +94,7 @@ export function AppMenu({
                       {user.avatar ? (
                         <img className="menu-badge-avatar" src={user.avatar} alt={`Avatar de ${user.name}`} />
                       ) : (
-                        <span className="menu-badge-avatar" aria-hidden="true">
+                        <span className="menu-badge-avatar menu-badge-avatar-fallback" aria-hidden="true">
                           {user.name.charAt(0).toUpperCase()}
                         </span>
                       )}

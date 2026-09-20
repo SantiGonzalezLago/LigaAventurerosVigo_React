@@ -12,7 +12,7 @@ export function ProfilePage() {
   const uid = routeUid?.trim() || activeUid;
 
   useEffect(() => {
-    if (!uid) navigate('/home', { replace: true });
+    if (!uid) navigate('/', { replace: true });
   }, [uid, navigate]);
 
   const isOwnProfile = uid === activeUid;

@@ -479,10 +479,13 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.menu-badge-avatar-fallback {
   background: var(--color-primary);
   color: #fff;
   font-weight: 600;
-  flex-shrink: 0;
 }
 
 .menu-badge-avatar-action {

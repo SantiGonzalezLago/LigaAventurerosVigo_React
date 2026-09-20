@@ -35,7 +35,7 @@ export function TabsLayout({ onOpenMenu, onOpenLogin }: { onOpenMenu: () => void
       </main>
 
       <nav className="tab-bar" id="main-tab-bar">
-        <NavLink to="/home" className={({ isActive }) => `tab-button${isActive ? ' active' : ''}`}>
+        <NavLink to="/" end className={({ isActive }) => `tab-button${isActive ? ' active' : ''}`}>
           <Home />
           <span>Inicio</span>
         </NavLink>

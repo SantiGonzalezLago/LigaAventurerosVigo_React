@@ -54,8 +54,8 @@ function AppShell() {
           path="/"
           element={<TabsLayout onOpenMenu={() => setIsMenuOpen(true)} onOpenLogin={() => setIsLoginModalOpen(true)} />}
         >
-          <Route index element={<Navigate to="/home" replace />} />
-          <Route path="home" element={<HomePage />} />
+          <Route index element={<HomePage />} />
+          <Route path="home" element={<Navigate to="/" replace />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="profile/:uid" element={<ProfilePage />} />
 
@@ -73,7 +73,7 @@ function AppShell() {
             <Route path="admin/game-systems/:slug" element={<ManageGameSystemPage />} />
           </Route>
 
-          <Route path="*" element={<Navigate to="/home" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
 
