@@ -2,6 +2,10 @@
   RewriteEngine On
   RewriteBase /
 
+  # Redirigir de HTTP a HTTPS de forma forzada
+  RewriteCond %{HTTPS} off
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
   # Si el archivo o directorio solicitado existe, servirlo tal cual
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
