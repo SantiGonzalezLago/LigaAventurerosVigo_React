@@ -4,10 +4,17 @@ import { apiService, ApiError } from '../../../../services/apiService';
 import { useToast } from '../../../../context/ToastContext';
 import { useUser } from '../../../../context/UserContext';
 
-type Tier = { id?: number; name: string; min_level: number; max_level: number; active: boolean };
+type Tier = {
+  id?: number;
+  name: string;
+  min_level: number;
+  max_level: number;
+  active: boolean;
+  color?: string;
+};
 type DraftTier = Tier & { _key: string };
 
-const TIER_COLORS = ['#4a9eff', '#52c41a', '#fa8c16', '#eb2f96', '#722ed1', '#13c2c2'];
+const DEFAULT_COLOR = '#4a9eff';
 const ROW_HEIGHT = 56;
 
 let nextKey = 1;
@@ -18,7 +25,11 @@ function makeKey() {
 }
 
 function toDraftTiers(tiers: Tier[]): DraftTier[] {
-  return tiers.map((tier) => ({ ...tier, _key: makeKey() }));
+  return tiers.map((tier) => ({
+    ...tier,
+    color: tier.color || DEFAULT_COLOR,
+    _key: makeKey(),
+  }));
 }
 
 function tierGridRow(tier: { min_level: number; max_level: number }) {
@@ -120,7 +131,10 @@ export function TabTiers({ systemId }: { systemId: number }) {
 
   const addTier = () => {
     const nextMin = activeDrafts.length > 0 ? activeDrafts[activeDrafts.length - 1].max_level + 1 : 1;
-    setDraftTiers((current) => [...current, { _key: makeKey(), name: '', min_level: nextMin, max_level: nextMin, active: true }]);
+    setDraftTiers((current) => [
+      ...current,
+      { _key: makeKey(), name: '', min_level: nextMin, max_level: nextMin, active: true, color: DEFAULT_COLOR },
+    ]);
   };
 
   const removeTier = (key: string) => {
@@ -140,6 +154,7 @@ export function TabTiers({ systemId }: { systemId: number }) {
       min_level: Math.round(tier.min_level),
       max_level: Math.round(tier.max_level),
       active: tier.active,
+      color: tier.color || DEFAULT_COLOR,
     }));
 
     try {
@@ -181,6 +196,14 @@ export function TabTiers({ systemId }: { systemId: number }) {
         step={1}
         aria-label="Nivel máximo"
         onChange={(event) => updateTier(tier._key, { max_level: Number(event.target.value) })}
+      />
+      <input
+        type="color"
+        className="tier-color-picker"
+        value={tier.color || DEFAULT_COLOR}
+        aria-label="Color del tier"
+        title="Seleccionar color"
+        onChange={(event) => updateTier(tier._key, { color: event.target.value })}
       />
     </div>
   );
@@ -225,45 +248,48 @@ export function TabTiers({ systemId }: { systemId: number }) {
             </div>
           ))}
 
-          {activeDrafts.map((tier, index) => (
-            <div
-              key={tier._key}
-              className={`tier-block${editMode ? ' edit-mode' : ''}`}
-              style={{
-                gridRow: tierGridRow(tier),
-                backgroundColor: `${TIER_COLORS[index % TIER_COLORS.length]}22`,
-                borderLeftColor: TIER_COLORS[index % TIER_COLORS.length],
-              }}
-            >
-              {editMode ? (
-                <div className="tier-block-edit">
-                  <div className="item tier-name-item">
-                    <input
-                      type="text"
-                      value={tier.name}
-                      placeholder="Nombre del tier"
-                      aria-label="Nombre del tier"
-                      onChange={(event) => updateTier(tier._key, { name: event.target.value })}
-                    />
+          {activeDrafts.map((tier) => {
+            const currentColor = tier.color || DEFAULT_COLOR;
+            return (
+              <div
+                key={tier._key}
+                className={`tier-block${editMode ? ' edit-mode' : ''}`}
+                style={{
+                  gridRow: tierGridRow(tier),
+                  backgroundColor: `${currentColor}22`,
+                  borderLeftColor: currentColor,
+                }}
+              >
+                {editMode ? (
+                  <div className="tier-block-edit">
+                    <div className="item tier-name-item">
+                      <input
+                        type="text"
+                        value={tier.name}
+                        placeholder="Nombre del tier"
+                        aria-label="Nombre del tier"
+                        onChange={(event) => updateTier(tier._key, { name: event.target.value })}
+                      />
+                    </div>
+                    {renderLevelFields(tier)}
+                    <div className="tier-actions">
+                      <button type="button" className="btn btn-clear btn-small" onClick={() => updateTier(tier._key, { active: false })}>
+                        Desactivar
+                      </button>
+                      <button type="button" className="btn btn-danger btn-small" onClick={() => removeTier(tier._key)}>
+                        Eliminar
+                      </button>
+                    </div>
                   </div>
-                  {renderLevelFields(tier)}
-                  <div className="tier-actions">
-                    <button type="button" className="btn btn-clear btn-small" onClick={() => updateTier(tier._key, { active: false })}>
-                      Desactivar
-                    </button>
-                    <button type="button" className="btn btn-danger btn-small" onClick={() => removeTier(tier._key)}>
-                      Eliminar
-                    </button>
+                ) : (
+                  <div className="tier-block-view">
+                    <span className="tier-name">{tier.name || '(sin nombre)'}</span>
+                    <span className="tier-range">{tierLevelLabel(tier)}</span>
                   </div>
-                </div>
-              ) : (
-                <div className="tier-block-view">
-                  <span className="tier-name">{tier.name || '(sin nombre)'}</span>
-                  <span className="tier-range">{tierLevelLabel(tier)}</span>
-                </div>
-              )}
-            </div>
-          ))}
+                )}
+              </div>
+            );
+          })}
         </div>
       ) : (
         <div className="ruler-empty-hint">No hay tiers activos</div>
@@ -300,6 +326,17 @@ export function TabTiers({ systemId }: { systemId: number }) {
                   </>
                 ) : (
                   <div className="inactive-tier-info">
+                    <span
+                      className="tier-color-indicator"
+                      style={{
+                        display: 'inline-block',
+                        width: '12px',
+                        height: '12px',
+                        borderRadius: '3px',
+                        backgroundColor: tier.color || DEFAULT_COLOR,
+                        marginRight: '8px',
+                      }}
+                    />
                     <span className="tier-name">{tier.name || '(sin nombre)'}</span>
                     <span className="tier-range">{tierLevelLabel(tier)}</span>
                   </div>

@@ -1165,8 +1165,9 @@ table.data-table tbody tr.banned {
 
 .qr-image {
   display: block;
-  margin: 16px auto;
-  border-radius: var(--radius-md);
+  margin: 0 auto;
+  padding: 6px;
+  background: white;
 }
 
 .qr-label,
@@ -1179,6 +1180,7 @@ table.data-table tbody tr.banned {
   display: block;
   text-align: center;
   font-weight: 600;
+  color: #25d366;
 }
 
 /* ---------- Action sheet ---------- */
@@ -1666,6 +1668,34 @@ table.data-table th {
 .level-sep {
   color: var(--text-color-medium);
   font-size: 0.85rem;
+}
+
+.tier-color-picker {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid rgba(var(--color-medium-rgb), 0.4);
+  border-radius: 6px;
+  cursor: pointer;
+  background: transparent;
+  margin-left: 4px;
+}
+
+.tier-color-picker::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.tier-color-picker::-webkit-color-swatch {
+  border: none;
+  border-radius: 5px;
+}
+
+.tier-color-picker::-moz-color-swatch {
+  border: none;
+  border-radius: 5px;
 }
 
 .tier-actions {
