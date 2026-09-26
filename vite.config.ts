@@ -8,16 +8,19 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+      includeAssets: ['favicon.ico', 'logo192.png', 'logo512.png'],
       manifest: {
         name: 'Liga de Aventureros de Vigo',
-        short_name: 'LAVigo',
-        description: 'Plataforma y comunidad de la Liga de Aventureros de Vigo',
-        theme_color: '#121212',
+        short_name: 'Liga de Aventureros',
+        description: 'Plataforma de la Liga de Aventureros de Vigo',
+        lang: 'es',
+        start_url: '.',
+        display: 'standalone',
+        orientation: 'any',
         icons: [
           {
             src: 'favicon.ico',
-            sizes: '32x32',
+            sizes: '256x256 128x128 64x64 48x48 32x32 24x24 16x16',
             type: 'image/x-icon'
           },
           {
